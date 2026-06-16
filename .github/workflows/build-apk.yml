@@ -8,12 +8,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout files
+        uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: stable
 
-      - run: flutter pub get
+      - name: Create fresh Flutter project
+        run: flutter create -t app smart_pdf_scanner
 
-      - run: flutter build apk --release
+      - name: Copy your app code
+        run: cp lib/main.dart smart_pdf_scanner/lib/main.dart
+
+      - name: Copy your pubspec
+        run: cp pubspec.yaml smart_pdf_scanner/pubspec.yaml
+
+      - name: Get packages
+        run: |
+          cd smart_pdf_scanner
+          flutter pub get
+
+      - name: Build APK
+        run: |
+          cd smart_pdf_scanner
+          flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmartPDFScanner
+          path: smart_pdf_scanner/build/app/outputs/flutter-apk/app-release.apk
