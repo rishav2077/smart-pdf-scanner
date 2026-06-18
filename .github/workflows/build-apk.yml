@@ -49,10 +49,10 @@ jobs:
       - name: Build APK
         run: |
           cd smart_pdf_scanner
-          flutter build apk --release --no-shrink
+          flutter build apk --debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: SmartPDFScanner
-          path: smart_pdf_scanner/build/app/outputs/flutter-apk/app-release.apk
+          path: smart_pdf_scanner/build/app/outputs/flutter-apk/app-debug.apk
