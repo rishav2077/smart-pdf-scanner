@@ -33,8 +33,19 @@ jobs:
       - name: Add ML Kit OCR modules
         run: |
           cd smart_pdf_scanner
-          sed -i "/dependencies {/a implementation 'com.google.mlkit:text-recognition-chinese:16.0.1'\n    implementation 'com.google.mlkit:text-recognition-devanagari:16.0.1'\n    implementation 'com.google.mlkit:text-recognition-japanese:16.0.1'\n    implementation 'com.google.mlkit:text-recognition-korean:16.0.1'" android/app/build.gradle.kts
-
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("android/app/build.gradle.kts")
+          s = p.read_text()
+          add = '''
+              implementation("com.google.mlkit:text-recognition-chinese:16.0.1")
+              implementation("com.google.mlkit:text-recognition-devanagari:16.0.1")
+              implementation("com.google.mlkit:text-recognition-japanese:16.0.1")
+              implementation("com.google.mlkit:text-recognition-korean:16.0.1")
+          '''
+          s = s.replace("dependencies {", "dependencies {" + add)
+          p.write_text(s)
+          PY
       - name: Build APK
         run: |
           cd smart_pdf_scanner
